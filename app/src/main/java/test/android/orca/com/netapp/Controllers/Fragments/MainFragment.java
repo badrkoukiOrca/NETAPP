@@ -57,7 +57,6 @@ public class MainFragment extends Fragment implements GithubUserAdapter.Listener
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         recherche = (EditText) view.findViewById(R.id.research) ;
-        btn = (Button) view.findViewById(R.id.btn) ;
 
         this.configureRecyclerView();
         this.configureSwipeRefreshLayout();
