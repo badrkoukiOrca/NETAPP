@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C7DEF8"
+    android:background="#FFFFFF"
     tools:context="test.android.orca.com.netapp.Controllers.Activities.DetailActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Détail"
             android:layout_marginLeft="30dp"
-            android:textColor="#FFF"
+            android:textColor="#2948ff"
             android:textStyle="bold"
             android:textSize="30dp"
             />
