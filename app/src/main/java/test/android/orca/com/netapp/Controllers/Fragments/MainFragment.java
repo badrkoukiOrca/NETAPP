@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,11 +150,15 @@ public class MainFragment extends Fragment implements GithubUserAdapter.Listener
         githubUsers.addAll(users);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
-        btn.setOnClickListener(new View.OnClickListener() {
+        recherche.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                String str = recherche.getText().toString() ;
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String str = charSequence.toString() ;
                 if(str.equals("")){
                     githubUsers.clear();
                     githubUsers.addAll(users);
@@ -163,8 +169,8 @@ public class MainFragment extends Fragment implements GithubUserAdapter.Listener
                     List<GithubUser> copy_user = new ArrayList<GithubUser>();
                     Iterator<GithubUser> itr = users.iterator() ;
                     while (itr.hasNext()){
-                        String login = itr.next().getLogin() ;
-                        if(login.contains(str)){
+                        String login = itr.next().getLogin().toLowerCase() ;
+                        if(login.contains(str.toLowerCase())){
                             copy_user.add(itr.next()) ;
                         }
                     }
@@ -177,6 +183,11 @@ public class MainFragment extends Fragment implements GithubUserAdapter.Listener
                     }
 
                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
