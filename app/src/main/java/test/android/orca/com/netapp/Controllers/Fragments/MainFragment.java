@@ -10,11 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,12 +45,18 @@ public class MainFragment extends Fragment implements GithubUserAdapter.Listener
     private List<GithubUser> githubUsers;
     private GithubUserAdapter adapter;
 
+    EditText recherche ;
+    Button btn ;
+
     public MainFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+        recherche = (EditText) view.findViewById(R.id.research) ;
+        btn = (Button) view.findViewById(R.id.btn) ;
+
         this.configureRecyclerView();
         this.configureSwipeRefreshLayout();
         this.configureOnClickRecyclerView();
@@ -114,6 +123,7 @@ public class MainFragment extends Fragment implements GithubUserAdapter.Listener
             @Override
             public void onNext(List<GithubUser> users) {
                 updateUI(users);
+
             }
 
             @Override
@@ -132,10 +142,42 @@ public class MainFragment extends Fragment implements GithubUserAdapter.Listener
     // UPDATE UI
     // -------------------
 
-    private void updateUI(List<GithubUser> users){
+    private void updateUI(final List<GithubUser> users){
+
         githubUsers.clear();
         githubUsers.addAll(users);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String str = recherche.getText().toString() ;
+
+                if(str.equals("")){
+                    githubUsers.clear();
+                    githubUsers.addAll(users);
+                    adapter.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+                else{
+                    List<GithubUser> copy_user = new ArrayList<GithubUser>();
+                    Iterator<GithubUser> itr = users.iterator() ;
+                    while (itr.hasNext()){
+                        String login = itr.next().getLogin() ;
+                        if(login.contains(str)){
+                            copy_user.add(itr.next()) ;
+                        }
+                    }
+                    if(copy_user!=null&&copy_user.size()!=0){
+                        githubUsers.clear();
+                        githubUsers.addAll(copy_user);
+                        adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                        copy_user = new ArrayList<GithubUser>() ;
+                    }
+
+                }
+            }
+        });
     }
 }
